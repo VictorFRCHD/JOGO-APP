@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Trophy, Star, TrendingUp, Award, Target, Zap, Users, Calendar } from 'lucide-react';
+import { Trophy, Star, TrendingUp, Award, Target, Zap, Users, Calendar, Activity, BarChart3, Clock } from 'lucide-react';
 
 const Dashboard = () => {
   const [user, setUser] = useState({
@@ -22,6 +22,21 @@ const Dashboard = () => {
     streak: 5
   });
 
+  const [activities, setActivities] = useState([
+    { id: 1, type: 'match', desc: 'Victoire en Arena', xp: 150, time: '2h ago', icon: Trophy },
+    { id: 2, type: 'achievement', desc: 'Badge "Speed Demon" débloqué', xp: 200, time: '5h ago', icon: Award },
+    { id: 3, type: 'league', desc: 'Monté en Ligue Campus', xp: 300, time: '1d ago', icon: TrendingUp },
+    { id: 4, type: 'challenge', desc: 'Challenge hebdomadaire terminé', xp: 500, time: '2d ago', icon: Target },
+    { id: 5, type: 'friend', desc: 'Nouveau match avec @Alex92', xp: 100, time: '3d ago', icon: Users }
+  ]);
+
+  const [achievements, setAchievements] = useState([
+    { name: 'Marathon Runner', progress: 75, max: 100, icon: Activity },
+    { name: 'Social Butterfly', progress: 32, max: 50, icon: Users },
+    { name: 'Perfect Week', progress: 5, max: 7, icon: Calendar },
+    { name: 'Coin Collector', progress: 2500, max: 5000, icon: Zap }
+  ]);
+
   const getRankColor = (rank) => {
     const colors = {
       'Bronze': 'from-orange-700 to-orange-900',
@@ -37,148 +52,155 @@ const Dashboard = () => {
   const xpPercentage = (user.xp / user.xpToNextLevel) * 100;
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-black text-white p-6">
-      {/* Header avec profil */}
+    <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-black p-6 animate-fade-in">
       <div className="max-w-7xl mx-auto">
-        <div className={`bg-gradient-to-r ${getRankColor(user.rank)} rounded-2xl p-8 mb-6 shadow-2xl`}>
-          <div className="flex items-center justify-between">
-            <div className="flex items-center space-x-6">
-              <div className="w-24 h-24 rounded-full bg-white/20 flex items-center justify-center border-4 border-white/30">
-                <Trophy className="w-12 h-12 text-white" />
+        <div className="mb-8 animate-fade-in-up">
+          <h1 className="text-4xl font-bold text-gradient mb-2">Tableau de Bord</h1>
+          <p className="text-gray-400">Bienvenue {user.username}! Suivez vos performances</p>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+          <div className="glass-card p-6 card-hover animate-fade-in-up" style={{animationDelay: '0.1s'}}>
+            <div className="flex items-center justify-between mb-4">
+              <div className="p-3 bg-gradient-to-br from-blue-500 to-purple-600 rounded-xl neon-glow-blue">
+                <Star className="text-white" size={24} />
               </div>
-              <div>
-                <h1 className="text-4xl font-bold mb-2">{user.username}</h1>
-                <div className="flex items-center space-x-4">
-                  <span className="text-xl font-semibold">Niveau {user.level}</span>
-                  <span className="px-4 py-1 bg-white/30 rounded-full text-sm font-bold">{user.rank}</span>
-                </div>
-              </div>
+              <span className="text-3xl font-bold text-white">{user.level}</span>
             </div>
-            <div className="text-right">
-              <div className="text-3xl font-bold mb-2">{user.shopCoins} 🪙</div>
-              <div className="text-sm opacity-90">JOGO Coins</div>
+            <h3 className="text-gray-400 text-sm mb-2">Niveau</h3>
+            <div className="relative w-full h-2 bg-gray-700 rounded-full overflow-hidden">
+              <div className="absolute top-0 left-0 h-full bg-gradient-to-r from-blue-500 to-purple-600 transition-all duration-1000" style={{width: `${xpPercentage}%`}}></div>
+            </div>
+            <p className="text-xs text-gray-500 mt-2">{user.xp} / {user.xpToNextLevel} XP</p>
+          </div>
+
+          <div className="glass-card p-6 card-hover animate-fade-in-up" style={{animationDelay: '0.2s'}}>
+            <div className="flex items-center justify-between mb-4">
+              <div className={`p-3 bg-gradient-to-br ${getRankColor(user.rank)} rounded-xl card-shine`}>
+                <Trophy className="text-white" size={24} />
+              </div>
+              <span className="text-2xl font-bold text-white">{user.rank}</span>
+            </div>
+            <h3 className="text-gray-400 text-sm">Rang Actuel</h3>
+            <p className="text-xs text-gray-500 mt-2">Top 15% Global</p>
+          </div>
+
+          <div className="glass-card p-6 card-hover animate-fade-in-up" style={{animationDelay: '0.3s'}}>
+            <div className="flex items-center justify-between mb-4">
+              <div className="p-3 bg-gradient-to-br from-green-500 to-emerald-600 rounded-xl neon-glow-green">
+                <TrendingUp className="text-white" size={24} />
+              </div>
+              <span className="text-3xl font-bold text-white">{user.winRate}%</span>
+            </div>
+            <h3 className="text-gray-400 text-sm">Taux de Victoire</h3>
+            <p className="text-xs text-green-500 mt-2">+5% ce mois</p>
+          </div>
+
+          <div className="glass-card p-6 card-hover animate-fade-in-up" style={{animationDelay: '0.4s'}}>
+            <div className="flex items-center justify-between mb-4">
+              <div className="p-3 bg-gradient-to-br from-yellow-500 to-orange-600 rounded-xl neon-glow-yellow">
+                <Zap className="text-white" size={24} />
+              </div>
+              <span className="text-3xl font-bold text-white">{user.shopCoins}</span>
+            </div>
+            <h3 className="text-gray-400 text-sm">JOGO Coins</h3>
+            <p className="text-xs text-yellow-500 mt-2">+250 cette semaine</p>
+          </div>
+        </div>
+
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
+          <div className="lg:col-span-2 glass-card p-6 animate-fade-in-up" style={{animationDelay: '0.5s'}}>
+            <div className="flex items-center justify-between mb-6">
+              <h2 className="text-2xl font-bold text-white flex items-center gap-2">
+                <Activity size={24} className="text-blue-500" />
+                Activité Récente
+              </h2>
+              <span className="text-sm text-gray-400">{activities.length} activités</span>
+            </div>
+            <div className="space-y-4">
+              {activities.map((activity, index) => {
+                const Icon = activity.icon;
+                return (
+                  <div key={activity.id} className="flex items-center gap-4 p-4 bg-gray-800/50 rounded-lg hover:bg-gray-800 transition-all card-hover" style={{animationDelay: `${0.6 + index * 0.1}s`}}>
+                    <div className="p-3 bg-gradient-to-br from-blue-500/20 to-purple-600/20 rounded-lg">
+                      <Icon size={20} className="text-blue-400" />
+                    </div>
+                    <div className="flex-1">
+                      <p className="text-white font-medium">{activity.desc}</p>
+                      <div className="flex items-center gap-3 mt-1">
+                        <span className="text-xs text-green-500 flex items-center gap-1"><Zap size={12} /> +{activity.xp} XP</span>
+                        <span className="text-xs text-gray-500 flex items-center gap-1"><Clock size={12} /> {activity.time}</span>
+                      </div>
+                    </div>
+                  </div>
+                );
+              })}
             </div>
           </div>
-          
-          {/* Barre XP */}
-          <div className="mt-6">
-            <div className="flex justify-between text-sm mb-2">
-              <span>XP: {user.xp} / {user.xpToNextLevel}</span>
-              <span>{Math.round(xpPercentage)}%</span>
+
+          <div className="glass-card p-6 animate-fade-in-up" style={{animationDelay: '0.6s'}}>
+            <h2 className="text-2xl font-bold text-white mb-6 flex items-center gap-2">
+              <BarChart3 size={24} className="text-purple-500" />
+              Statistiques
+            </h2>
+            <div className="space-y-4">
+              {Object.entries(user.stats).map(([stat, value], index) => (
+                <div key={stat} className="animate-slide-in-right" style={{animationDelay: `${0.7 + index * 0.1}s`}}>
+                  <div className="flex justify-between items-center mb-2">
+                    <span className="text-gray-400 capitalize text-sm">{stat}</span>
+                    <span className="text-white font-bold">{value}</span>
+                  </div>
+                  <div className="relative w-full h-2 bg-gray-700 rounded-full overflow-hidden">
+                    <div className="absolute top-0 left-0 h-full bg-gradient-to-r from-blue-500 to-purple-600 transition-all duration-1000" style={{width: `${value}%`}}></div>
+                  </div>
+                </div>
+              ))}
             </div>
-            <div className="w-full bg-white/20 rounded-full h-4 overflow-hidden">
-              <div 
-                className="h-full bg-gradient-to-r from-green-400 to-blue-500 transition-all duration-500"
-                style={{ width: `${xpPercentage}%` }}
-              />
+            <div className="mt-6 pt-6 border-t border-gray-700">
+              <div className="grid grid-cols-2 gap-4">
+                <div className="text-center">
+                  <p className="text-3xl font-bold text-white mb-1">{user.recentMatches}</p>
+                  <p className="text-xs text-gray-400">Matchs Joués</p>
+                </div>
+                <div className="text-center">
+                  <p className="text-3xl font-bold text-orange-500 mb-1">{user.streak}</p>
+                  <p className="text-xs text-gray-400">Série Actuelle</p>
+                </div>
+              </div>
             </div>
           </div>
         </div>
 
-        {/* Stats Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-6">
-          <div className="bg-gradient-to-br from-blue-600 to-blue-800 rounded-xl p-6 shadow-lg">
-            <div className="flex items-center justify-between mb-4">
-              <Target className="w-8 h-8" />
-              <span className="text-3xl font-bold">{user.recentMatches}</span>
-            </div>
-            <div className="text-sm opacity-90">Matchs joués</div>
+        <div className="glass-card p-6 animate-fade-in-up" style={{animationDelay: '0.7s'}}>
+          <div className="flex items-center justify-between mb-6">
+            <h2 className="text-2xl font-bold text-white flex items-center gap-2">
+              <Target size={24} className="text-green-500" />
+              Progression des Objectifs
+            </h2>
+            <button className="text-sm text-blue-400 hover:text-blue-300 transition-colors">Voir tous</button>
           </div>
-
-          <div className="bg-gradient-to-br from-green-600 to-green-800 rounded-xl p-6 shadow-lg">
-            <div className="flex items-center justify-between mb-4">
-              <TrendingUp className="w-8 h-8" />
-              <span className="text-3xl font-bold">{user.winRate}%</span>
-            </div>
-            <div className="text-sm opacity-90">Taux de victoire</div>
-          </div>
-
-          <div className="bg-gradient-to-br from-purple-600 to-purple-800 rounded-xl p-6 shadow-lg">
-            <div className="flex items-center justify-between mb-4">
-              <Zap className="w-8 h-8" />
-              <span className="text-3xl font-bold">{user.streak}</span>
-            </div>
-            <div className="text-sm opacity-90">Série de victoires</div>
-          </div>
-
-          <div className="bg-gradient-to-br from-orange-600 to-orange-800 rounded-xl p-6 shadow-lg">
-            <div className="flex items-center justify-between mb-4">
-              <Award className="w-8 h-8" />
-              <span className="text-3xl font-bold">{user.badges.length}</span>
-            </div>
-            <div className="text-sm opacity-90">Badges débloqués</div>
-          </div>
-        </div>
-
-        {/* Attributs du joueur */}
-        <div className="bg-gray-800 rounded-xl p-6 mb-6 shadow-lg">
-          <h2 className="text-2xl font-bold mb-6 flex items-center">
-            <Users className="w-6 h-6 mr-3 text-blue-400" />
-            Attributs du Joueur
-          </h2>
-          <div className="space-y-4">
-            {Object.entries(user.stats).map(([stat, value]) => (
-              <div key={stat}>
-                <div className="flex justify-between text-sm mb-2 capitalize">
-                  <span className="font-semibold">{stat}</span>
-                  <span className="text-blue-400">{value}/100</span>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            {achievements.map((achievement, index) => {
+              const Icon = achievement.icon;
+              const progress = (achievement.progress / achievement.max) * 100;
+              return (
+                <div key={achievement.name} className="p-4 bg-gray-800/50 rounded-lg card-hover" style={{animationDelay: `${0.8 + index * 0.1}s`}}>
+                  <div className="flex items-center gap-3 mb-3">
+                    <div className="p-2 bg-gradient-to-br from-purple-500/20 to-pink-500/20 rounded-lg">
+                      <Icon size={20} className="text-purple-400" />
+                    </div>
+                    <div className="flex-1">
+                      <h3 className="text-white font-medium">{achievement.name}</h3>
+                      <p className="text-xs text-gray-400">{achievement.progress} / {achievement.max}</p>
+                    </div>
+                    <span className="text-lg font-bold text-purple-400">{Math.round(progress)}%</span>
+                  </div>
+                  <div className="relative w-full h-2 bg-gray-700 rounded-full overflow-hidden">
+                    <div className="absolute top-0 left-0 h-full bg-gradient-to-r from-purple-500 to-pink-500 transition-all duration-1000" style={{width: `${progress}%`}}></div>
+                  </div>
                 </div>
-                <div className="w-full bg-gray-700 rounded-full h-3 overflow-hidden">
-                  <div 
-                    className="h-full bg-gradient-to-r from-blue-500 to-purple-500 transition-all duration-500"
-                    style={{ width: `${value}%` }}
-                  />
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-
-        {/* Badges */}
-        <div className="bg-gray-800 rounded-xl p-6 shadow-lg">
-          <h2 className="text-2xl font-bold mb-6 flex items-center">
-            <Star className="w-6 h-6 mr-3 text-yellow-400" />
-            Badges Récents
-          </h2>
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-            {user.badges.map((badge, index) => (
-              <div key={index} className="bg-gradient-to-br from-yellow-600 to-orange-600 rounded-lg p-4 text-center hover:scale-105 transition-transform cursor-pointer">
-                <Award className="w-12 h-12 mx-auto mb-2" />
-                <div className="text-xs font-semibold capitalize">{badge.replace('_', ' ')}</div>
-              </div>
-            ))}
-          </div>
-        </div>
-
-        {/* Prochains événements */}
-        <div className="mt-6 bg-gray-800 rounded-xl p-6 shadow-lg">
-          <h2 className="text-2xl font-bold mb-6 flex items-center">
-            <Calendar className="w-6 h-6 mr-3 text-green-400" />
-            Événements à venir
-          </h2>
-          <div className="space-y-4">
-            <div className="bg-gray-700 rounded-lg p-4 hover:bg-gray-600 transition-colors cursor-pointer">
-              <div className="flex justify-between items-center">
-                <div>
-                  <div className="font-bold text-lg">⚽ Football 5v5</div>
-                  <div className="text-sm text-gray-400">Parc Central - 18h00</div>
-                </div>
-                <button className="px-6 py-2 bg-blue-600 hover:bg-blue-700 rounded-lg font-semibold transition-colors">
-                  Rejoindre
-                </button>
-              </div>
-            </div>
-            <div className="bg-gray-700 rounded-lg p-4 hover:bg-gray-600 transition-colors cursor-pointer">
-              <div className="flex justify-between items-center">
-                <div>
-                  <div className="font-bold text-lg">🏀 Basketball 3v3</div>
-                  <div className="text-sm text-gray-400">Gymnase Nord - 20h00</div>
-                </div>
-                <button className="px-6 py-2 bg-blue-600 hover:bg-blue-700 rounded-lg font-semibold transition-colors">
-                  Rejoindre
-                </button>
-              </div>
-            </div>
+              );
+            })}
           </div>
         </div>
       </div>
