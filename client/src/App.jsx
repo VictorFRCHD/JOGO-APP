@@ -1,6 +1,6 @@
 // JOGO - Application Sportive Gamifiée Complete
 import React, { useState } from 'react';
-import { Home, Users, Trophy, ShoppingBag, User, Calendar as CalendarIcon, Crown, Sword, Menu, X, Bell, Coins } from 'lucide-react';
+import { Home, Users, Trophy, ShoppingBag, User, Calendar as CalendarIcon, Crown, Sword, Menu, X, Bell, Coins, Settings as SettingsIcon } from 'lucide-react';
 import './App.css';
 import Dashboard from './components/Dashboard';
 import Arena from './components/Arena';
@@ -8,6 +8,10 @@ import Store from './components/Store';
 import Profile from './components/Profile';
 import Calendar from './components/Calendar';
 import JOGOPass from './components/JOGOPass';
+import Leagues from './components/Leagues';
+import Friends from './components/Friends';
+import Settings from './components/Settings';
+import Notifications from './components/Notifications';
 
 function App() {
   const [currentView, setCurrentView] = useState('dashboard');
@@ -50,6 +54,14 @@ function App() {
         return <Calendar />;
       case 'jogopass':
         return <JOGOPass />;
+            case 'leagues':
+      return <Leagues />;
+    case 'friends':
+      return <Friends />;
+    case 'settings':
+      return <Settings />;
+    case 'notifications':
+      return <Notifications />;
       default:
         return <Dashboard />;
     }
@@ -178,6 +190,45 @@ function App() {
                   ? 'bg-purple-600 text-white'
                   : 'text-gray-300 hover:bg-gray-700'
               }`}
+                          <User size={20} />
+            <span className="font-semibold">Profil</span>
+          </button>
+          
+          <button
+            onClick={() => { setCurrentView('leagues'); setMenuOpen(false); }}
+            className={`w-full flex items-center space-x-3 px-4 py-3 rounded-lg transition-colors ${
+              currentView === 'leagues'
+                ? 'bg-purple-600 text-white'
+                : 'text-gray-300 hover:bg-gray-700'
+            }`}
+          >
+            <Trophy size={20} />
+            <span className="font-semibold">Ligues</span>
+          </button>
+          
+          <button
+            onClick={() => { setCurrentView('friends'); setMenuOpen(false); }}
+            className={`w-full flex items-center space-x-3 px-4 py-3 rounded-lg transition-colors ${
+              currentView === 'friends'
+                ? 'bg-purple-600 text-white'
+                : 'text-gray-300 hover:bg-gray-700'
+            }`}
+          >
+            <Users size={20} />
+            <span className="font-semibold">Amis</span>
+          </button>
+          
+          <button
+            onClick={() => { setCurrentView('settings'); setMenuOpen(false); }}
+            className={`w-full flex items-center space-x-3 px-4 py-3 rounded-lg transition-colors ${
+              currentView === 'settings'
+                ? 'bg-purple-600 text-white'
+                : 'text-gray-300 hover:bg-gray-700'
+            }`}
+          >
+            <Settings size={20} />
+            <span className="font-semibold">Paramètres</span>
+          </button>
             >
               <User size={20} />
               <span className="font-semibold">Profil</span>
